@@ -1,6 +1,6 @@
 # OICQTea
 
-#example
+# example
 const TeaClass=new Tea()
 let DecryptData="00 01 02 03 04"
 let Key="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
