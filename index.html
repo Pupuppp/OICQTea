@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tea Decrypt</title>
+    <script src="./tea.js"></script>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="./bootstrap.min.js"></script>
+</head>
+
+<body style="display: flex; flex-direction: column;align-items: center;justify-content: center;flex-wrap: wrap;">
+
+    <div style="margin-bottom: 10px;width: 15%;">
+        <input type="text" id="key" class="form-control" placeholder="私钥">
+    </div>
+    <div style="width: 100%;display: flex;justify-content: space-around;">
+
+        <div style="width: 30%;">
+            <textarea class="form-control" rows="15" id="in"></textarea>
+        </div>
+        <div style="width: 30%;display: none;" id="container">
+            <textarea class="form-control" id="out" rows="15"></textarea>
+        </div>
+    </div>
+
+    <div style="width: 100%;display: flex;justify-content:space-evenly;align-items: center;">
+        <div style="display: flex;justify-content: space-around;width: 30%;margin-top: 10px;">
+            <button type="button" class="btn btn-primary" onclick="encrypt()">加密</button>
+            <button type="button" class="btn btn-primary" onclick="decrypt()">解密</button>
+        </div>
+
+    </div>
+</body>
+<style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+    }
+</style>
+
+<script>
+    Array.prototype.HexStringToNumber = function () {
+        let Ret = []
+        this.map((value) => {
+            Ret.push(parseInt(value, 16))
+        })
+        return Ret
+    }
+
+    Array.prototype.HexNumberToString = function () {
+        let Ret = []
+        this.map((value) => {
+            let hex = value.toString(16)
+            if (hex.length === 1) {
+                hex = "0" + hex
+            }
+            Ret.push(hex)
+        })
+        return Ret
+    }
+
+    Array.prototype.StringArrayToString = function () {
+        return this.toString().replace(/,/g, " ")
+    }
+
+
+    String.prototype.NumberStringToHexString = function () {
+        let Str = ""
+        this.split(" ").map((value) => {
+            let i = parseInt(value, 16)
+            let hex = i.toString(16)
+            if (hex.length == 1) {
+                hex = "0" + hex
+            }
+            Str += hex + " "
+        })
+        return Str.trim()
+    }
+
+    String.prototype.HexStringToNumber = function () {
+        let NumbetList = [];
+        this.split(" ").map((value) => {
+            NumbetList.push(parseInt(value, 16))
+        })
+        return NumbetList
+    }
+
+    String.prototype.NumberStringToHexString = function () {
+        let Str = ""
+        this.split(" ").map((value) => {
+            let i = parseInt(value, 16)
+            let hex = i.toString(16)
+            if (hex.length == 1) {
+                hex = "0" + hex
+            }
+            Str += hex + " "
+        })
+        return Str.trim()
+    }
+
+    String.prototype.HexStringToNumber = function () {
+        let NumbetList = [];
+        this.split(" ").map((value) => {
+            NumbetList.push(parseInt(value, 16))
+        })
+        return NumbetList
+    }
+
+
+
+
+
+
+    function decrypt() {
+        let keyel = document.getElementById("key")
+        if (keyel.value) {
+            let splitkey = keyel.value.trim().split(" ")
+            if (splitkey.length === 16) {
+                let decryptdata = document.getElementById("in")
+                if (decryptdata.value) {
+                    let splitdecryptdata = decryptdata.value.trim().split(" ")
+                    let hexlist = splitdecryptdata.HexStringToNumber()
+                    let hexlist2 = splitkey.HexStringToNumber()
+                    let t = new Tea()
+                    let result = t.Decrypt(hexlist, hexlist2)
+                    if (result) {
+                        document.getElementById("container").style.display = ""
+                        document.getElementById("out").value = result.HexNumberToString().StringArrayToString().toLocaleUpperCase()
+                    } else {
+                        alert("解密失败")
+                    }
+                }
+            } else {
+                alert("密钥必须16字节")
+            }
+        }
+    }
+
+    function encrypt() {
+        let keyel = document.getElementById("key")
+        if (keyel.value) {
+            let splitkey = keyel.value.trim().split(" ")
+            if (splitkey.length === 16) {
+                let encryptdata = document.getElementById("in")
+                if (decryptdata.value) {
+                    let splitencryptdata = encryptdata.value.trim().split(" ")
+                    let hexlist = splitencryptdata.HexStringToNumber()
+                    let hexlist2 = splitkey.HexStringToNumber()
+                    let t = new Tea()
+                    let result = t.Encrypt(hexlist, hexlist2)
+                    if (result) {
+                        document.getElementById("container").style.display = ""
+                        document.getElementById("out").value = result.HexNumberToString().StringArrayToString().toLocaleUpperCase()
+                    } else {
+                        alert("加密失败")
+                    }
+                }
+            } else {
+                alert("密钥必须16字节")
+            }
+        }
+
+    }
+</script>
+
+</html>
